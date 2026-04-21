@@ -15,11 +15,17 @@ Route::get('/settings/bank-details', [SettingsController::class, 'bankDetails'])
 
 Route::get('/run-migrations', function () {
     try {
-        \Artisan::call('migrate', ['--force' => true]);
-        $migrate = \Artisan::output();
-        \Artisan::call('db:seed', ['--force' => true]);
-        $seed = \Artisan::output();
-        return response()->json(['migrate' => $migrate, 'seed' => $seed]);
+        \Schema::create('personal_access_tokens', function ($table) {
+            $table->id();
+            $table->morphs('tokenable');
+            $table->string('name');
+            $table->string('token', 64)->unique();
+            $table->text('abilities')->nullable();
+            $table->timestamp('last_used_at')->nullable();
+            $table->timestamp('expires_at')->nullable();
+            $table->timestamps();
+        });
+        return response()->json(['success' => 'personal_access_tokens table created']);
     } catch (\Exception $e) {
         return response()->json(['error' => $e->getMessage()]);
     }
