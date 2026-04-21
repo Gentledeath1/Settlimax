@@ -1,10 +1,20 @@
 /vendor
 /node_modules
 /.env
-/storage/app/public
-/storage/framework/cache
-/storage/framework/sessions
-/storage/framework/views
-/storage/logs
-/bootstrap/cache
 .phpunit.result.cache
+
+# Keep storage and cache dirs but ignore their contents
+/storage/app/public/*
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/storage/logs/*
+/bootstrap/cache/*
+
+# But keep the .gitkeep files
+!/storage/app/public/.gitkeep
+!/storage/framework/cache/.gitkeep
+!/storage/framework/sessions/.gitkeep
+!/storage/framework/views/.gitkeep
+!/storage/logs/.gitkeep
+!/bootstrap/cache/.gitkeep
