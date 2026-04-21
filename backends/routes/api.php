@@ -13,6 +13,18 @@ Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/login',    [AuthController::class, 'login']);
 Route::get('/settings/bank-details', [SettingsController::class, 'bankDetails']);
 
+Route::get('/run-migrations', function () {
+    try {
+        \Artisan::call('migrate', ['--force' => true]);
+        $migrate = \Artisan::output();
+        \Artisan::call('db:seed', ['--force' => true]);
+        $seed = \Artisan::output();
+        return response()->json(['migrate' => $migrate, 'seed' => $seed]);
+    } catch (\Exception $e) {
+        return response()->json(['error' => $e->getMessage()]);
+    }
+});
+
 /* ─── Authenticated ─── */
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/auth/logout', [AuthController::class, 'logout']);
